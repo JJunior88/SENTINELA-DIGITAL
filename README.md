@@ -4,6 +4,20 @@ Aplicação web em português para registrar auditorias, acompanhar incidentes e
 
 ## Executar
 
+### Windows, sem instalar Python
+
+Abra [Actions → Aplicativo Windows](https://github.com/JJunior88/SENTINELA-DIGITAL/actions/workflows/windows.yml),
+selecione uma execução concluída com sucesso da branch `codex/sentinela-github-tests`
+e baixe **SentinelaDigital-Windows** em **Artifacts** (requer login no GitHub).
+Extraia o ZIP e abra **SentinelaDigital.exe**. O navegador abre automaticamente;
+feche a janela do programa para encerrar. É uma versão portátil para Windows
+10/11 x64. Consulte `LEIA-ME-WINDOWS.txt` para dados e backup.
+
+O workflow gera o pacote e testa o próprio executável antes de oferecer o download.
+Os artefatos expiram em 30 dias; um novo push gera outro pacote.
+
+### Executar pelo código-fonte
+
 Requer Python 3.12 ou superior, sem pacotes externos.
 
 ```bash

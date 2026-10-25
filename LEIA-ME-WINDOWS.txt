@@ -1,0 +1,22 @@
+SENTINELA DIGITAL - Windows 10/11 x64
+
+1. Extraia o ZIP para uma pasta do seu computador.
+2. Abra SentinelaDigital.exe com dois cliques. Não exige Python nem administrador.
+3. O navegador abrirá automaticamente. Mantenha a janela do programa aberta.
+4. Para encerrar, feche a janela do programa. Os registros são preservados.
+
+É um aplicativo portátil, sem instalador. Para removê-lo, exclua o executável.
+Os dados ficam em %LOCALAPPDATA%\SentinelaDigital\sentinela.db.
+Para backup, feche o programa e copie esse arquivo. A exclusão do executável
+não apaga os dados. Não execute várias instâncias simultaneamente.
+
+TESTE RÁPIDO
+Clique em Novo registro, cadastre uma auditoria, altere o status, experimente
+a busca e os filtros. Encerre e abra o programa para conferir a persistência.
+
+O executável não possui assinatura digital. O Windows pode exibir aviso de
+editor desconhecido. Verifique a origem e respeite as políticas do seu PC;
+não desative o antivírus. O pacote inclui o checksum SHA256 do executável.
+
+Versão local de gestão manual, sem login. Não executa varreduras, não remove
+malware nem recupera arquivos automaticamente. Escuta somente em 127.0.0.1.
