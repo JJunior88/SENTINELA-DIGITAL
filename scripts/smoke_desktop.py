@@ -35,6 +35,10 @@ with tempfile.TemporaryDirectory() as tmp:
                 assert 'Novo registro' in response.read().decode()
             with urlopen(url + 'api/health', timeout=5) as response:
                 assert json.load(response)['status'] == 'ok'
+            with urlopen(url + 'security-ui.js', timeout=5) as response:
+                assert 'refreshSecurity' in response.read().decode()
+            with urlopen(url + 'api/security', timeout=5) as response:
+                assert json.load(response)['google_connected'] is False
             record = dict(kind='auditoria', title='Teste desktop', asset='PC', priority='Baixa', status='Aberto', notes='')
             request = Request(url + 'api/records', data=json.dumps(record).encode(), headers={'Content-Type': 'application/json'})
             with urlopen(request, timeout=5) as response:

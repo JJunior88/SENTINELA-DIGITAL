@@ -22,7 +22,7 @@ jobs:
       - name: Instalar ferramenta de empacotamento
         run: python -m pip install pyinstaller==6.16.0
       - name: Gerar executável independente
-        run: python -m PyInstaller --noconfirm --clean --onefile --name SentinelaDigital --add-data "index.html:." desktop.py
+        run: python -m PyInstaller --noconfirm --clean --onefile --name SentinelaDigital --add-data "index.html:." --add-data "security-ui.js:." desktop.py
       - name: Testar executável Windows
         run: python scripts/smoke_desktop.py dist/SentinelaDigital.exe
       - name: Incluir instruções e checksum

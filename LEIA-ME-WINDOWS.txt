@@ -1,7 +1,7 @@
 SENTINELA DIGITAL - Windows 10/11 x64
 
 1. Extraia o ZIP para uma pasta do seu computador.
-2. Abra SentinelaDigital.exe com dois cliques. Não exige Python nem administrador.
+2. Abra SentinelaDigital.exe com dois cliques. Não exige Python.
 3. O navegador abrirá automaticamente. Mantenha a janela do programa aberta.
 4. Para encerrar, feche a janela do programa. Os registros são preservados.
 
@@ -18,5 +18,27 @@ O executável não possui assinatura digital. O Windows pode exibir aviso de
 editor desconhecido. Verifique a origem e respeite as políticas do seu PC;
 não desative o antivírus. O pacote inclui o checksum SHA256 do executável.
 
-Versão local de gestão manual, sem login. Não executa varreduras, não remove
-malware nem recupera arquivos automaticamente. Escuta somente em 127.0.0.1.
+SEGURANÇA DO PC
+Na seção Verificação de segurança, consulte a proteção ou inicie a varredura
+rápida do Microsoft Defender. Confirme antes de iniciar: o Defender pode aplicar
+as ações configuradas no Windows, inclusive quarentena. O Windows pode exigir
+permissões adicionais. A varredura rápida não verifica todos os arquivos.
+O relatório inclui o estado da proteção e o histórico, que pode conter detecções
+antigas. Consulte também a Segurança do Windows. Não desative seu antivírus.
+
+CONTA GOOGLE E DRIVE
+O acesso exige um aplicativo OAuth registrado no Google Cloud Console:
+ative a Google Drive API, configure o consentimento e os usuários de teste,
+adicione o escopo drive.metadata.readonly e crie um cliente OAuth do tipo
+Aplicativo para computador. Baixe o JSON e selecione no Sentinela.
+Clique em Conectar Google e autorize no site oficial do Google.
+Nunca informe sua senha no Sentinela nem envie o JSON pelo chat.
+A revisão verifica até 1.000 nomes/tipos e indicadores de compartilhamento;
+não lê conteúdo, não baixa arquivos e não comprova presença ou ausência de vírus.
+Os tokens e relatórios ficam apenas na memória. Fechar o programa encerra o
+acesso local. Para revogar no Google, acesse myaccount.google.com/connections.
+O check-up oficial do Google permite revisar senha, sessões e verificação em
+duas etapas, que não podem ser auditadas por este aplicativo.
+
+Versão local, sem login entre usuários do PC. Não recupera arquivos automaticamente.
+Escuta somente em 127.0.0.1. Não exponha à internet.

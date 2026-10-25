@@ -79,6 +79,32 @@ class ApplicationTest(unittest.TestCase):
         with self.assertRaises(sqlite3.ProgrammingError):
             failed_db.execute('SELECT 1')
 
+    def test_local_api_protection(self):
+        for headers in ({'Origin': 'https://example.com'}, {'Host': 'attacker.example'}, {'Sec-Fetch-Site': 'cross-site'}):
+            request = Request(self.url + '/api/security', headers=headers)
+            with self.assertRaises(HTTPError) as error:
+                urlopen(request, timeout=5)
+            self.assertEqual(error.exception.code, 403)
+        request = Request(self.url + '/api/pc/scan', data=b'{}', headers={'Content-Type': 'text/plain'})
+        with self.assertRaises(HTTPError) as error:
+            urlopen(request, timeout=5)
+        self.assertEqual(error.exception.code, 415)
+        with self.assertRaises(HTTPError) as error:
+            self.request('/api/pc/scan', {})
+        self.assertEqual(error.exception.code, 400)
+
+    def test_security_interface_and_google_requirements(self):
+        status = self.request('/api/security')
+        self.assertFalse(status['google_connected'])
+        with urlopen(self.url + '/security-ui.js', timeout=5) as response:
+            self.assertIn('refreshSecurity', response.read().decode())
+        with self.assertRaises(HTTPError) as error:
+            self.request('/api/google/connect', {'web': {}})
+        self.assertEqual(error.exception.code, 400)
+        with self.assertRaises(HTTPError) as error:
+            self.request('/api/google/scan', {})
+        self.assertEqual(error.exception.code, 400)
+
 
 if __name__ == '__main__':
     unittest.main()
