@@ -22,6 +22,11 @@ def main():
     print(f'Banco de dados: {app.DB}', flush=True)
     if os.environ.get('SENTINELA_NO_BROWSER') != '1':
         threading.Timer(0.5, webbrowser.open, args=(url,)).start()
+    if os.environ.get('SENTINELA_TEST_CONTROL') == '1':
+        def control():
+            if sys.stdin.readline().strip() == 'STOP':
+                server.shutdown()
+        threading.Thread(target=control, daemon=True).start()
     try:
         server.serve_forever()
     except KeyboardInterrupt:

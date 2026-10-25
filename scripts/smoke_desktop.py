@@ -11,10 +11,11 @@ from urllib.request import Request, urlopen
 
 with tempfile.TemporaryDirectory() as tmp:
     output = Path(tmp) / 'startup.log'
-    env = dict(os.environ, SENTINELA_NO_BROWSER='1', SENTINELA_DB=str(Path(tmp) / 'records.db'))
+    env = dict(os.environ, SENTINELA_NO_BROWSER='1', SENTINELA_TEST_CONTROL='1', SENTINELA_DB=str(Path(tmp) / 'records.db'))
     command = sys.argv[1:] or [sys.executable, 'desktop.py']
     with output.open('w') as log:
-        process = subprocess.Popen(command, env=env, stdout=log, stderr=subprocess.STDOUT)
+        process = subprocess.Popen(command, env=env, stdin=subprocess.PIPE,
+                                   stdout=log, stderr=subprocess.STDOUT)
         try:
             url = None
             deadline = time.monotonic() + 45
@@ -42,6 +43,23 @@ with tempfile.TemporaryDirectory() as tmp:
                 assert json.load(response)[0]['title'] == 'Teste desktop'
             assert Path(env['SENTINELA_DB']).is_file()
             print('Desktop OK: interface, saúde, cadastro e banco de dados.')
+        except Exception:
+            print('Saída do aplicativo:', output.read_text(errors='replace'), flush=True)
+            raise
         finally:
-            process.terminate()
-            process.wait(timeout=10)
+            try:
+                if process.poll() is None:
+                    process.stdin.write(b'STOP\n')
+                    process.stdin.flush()
+                process.wait(timeout=15)
+            except (BrokenPipeError, OSError, subprocess.TimeoutExpired):
+                if os.name == 'nt':
+                    subprocess.run(['taskkill', '/PID', str(process.pid), '/T', '/F'], check=False)
+                else:
+                    process.kill()
+                process.wait(timeout=10)
+                raise
+            finally:
+                process.stdin.close()
+            if process.returncode != 0:
+                raise RuntimeError(f'Aplicativo encerrou com código {process.returncode}: ' + output.read_text(errors='replace'))
