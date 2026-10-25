@@ -2,6 +2,7 @@
 import json
 import os
 import sqlite3
+from contextlib import contextmanager
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from uuid import uuid4
@@ -13,12 +14,17 @@ STATUSES = {'Aberto', 'Em andamento', 'Concluído'}
 PRIORITIES = {'Baixa', 'Média', 'Alta', 'Crítica'}
 
 
+@contextmanager
 def connect():
     DB.parent.mkdir(parents=True, exist_ok=True)
     db = sqlite3.connect(DB)
-    db.row_factory = sqlite3.Row
-    db.execute('CREATE TABLE IF NOT EXISTS records (id TEXT PRIMARY KEY, kind TEXT, title TEXT, asset TEXT, priority TEXT, status TEXT, notes TEXT, created_at TEXT DEFAULT CURRENT_TIMESTAMP)')
-    return db
+    try:
+        db.row_factory = sqlite3.Row
+        with db:
+            db.execute('CREATE TABLE IF NOT EXISTS records (id TEXT PRIMARY KEY, kind TEXT, title TEXT, asset TEXT, priority TEXT, status TEXT, notes TEXT, created_at TEXT DEFAULT CURRENT_TIMESTAMP)')
+            yield db
+    finally:
+        db.close()
 
 
 class Handler(BaseHTTPRequestHandler):

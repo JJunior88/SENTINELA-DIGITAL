@@ -1,4 +1,5 @@
 import json
+import sqlite3
 import tempfile
 import threading
 import unittest
@@ -66,6 +67,17 @@ class ApplicationTest(unittest.TestCase):
     def test_web_page(self):
         with urlopen(self.url + '/', timeout=5) as response:
             self.assertIn('Novo registro', response.read().decode())
+
+    def test_database_connections_close(self):
+        with app.connect() as db:
+            db.execute('SELECT 1')
+        with self.assertRaises(sqlite3.ProgrammingError):
+            db.execute('SELECT 1')
+        with self.assertRaises(RuntimeError):
+            with app.connect() as failed_db:
+                raise RuntimeError('Falha simulada')
+        with self.assertRaises(sqlite3.ProgrammingError):
+            failed_db.execute('SELECT 1')
 
 
 if __name__ == '__main__':
